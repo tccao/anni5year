@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5 Years of Us 💕</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & BASE ───────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --coral:  #FF6B6B;
+      --yellow: #FFE66D;
+      --mint:   #4ECDC4;
+      --pink:   #FF8FAB;
+      --purple: #C77DFF;
+      --teal:   #45B7D1;
+      --green:  #2ECC71;
+      --bg:     #FFF9F0;
+      --dark:   #2D2D2D;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── CONFETTI CANVAS ──────────────────────────────────────── */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── HERO ────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 2rem;
+      background: radial-gradient(ellipse at 20% 30%, #FFE66D33 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 70%, #FF6B6B22 0%, transparent 60%),
+                  radial-gradient(ellipse at 50% 50%, #4ECDC422 0%, transparent 70%);
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--coral);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.45rem 1.4rem;
+      border-radius: 100px;
+      margin-bottom: 1.8rem;
+      animation: floatBob 3s ease-in-out infinite;
+    }
+
+    .hero h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(3.2rem, 12vw, 7.5rem);
+      line-height: 1.1;
+      background: linear-gradient(330deg, var(--coral), var(--pink), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-names {
+      font-size: clamp(1.3rem, 4vw, 2.2rem);
+      font-weight: 900;
+      color: var(--dark);
+      margin-bottom: 1.4rem;
+    }
+
+    .heart {
+      display: inline-block;
+      color: var(--coral);
+      animation: heartbeat 1.3s ease-in-out infinite;
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: #777;
+      max-width: 480px;
+      line-height: 1.75;
+      margin-bottom: 2.2rem;
+    }
+
+    .emoji-row {
+      display: flex;
+      gap: 1.2rem;
+      font-size: 2.2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .emoji-row span {
+      display: inline-block;
+      animation: floatBob 3s ease-in-out infinite;
+    }
+    .emoji-row span:nth-child(1) { animation-delay: 0s; }
+    .emoji-row span:nth-child(2) { animation-delay: 0.4s; }
+    .emoji-row span:nth-child(3) { animation-delay: 0.8s; }
+    .emoji-row span:nth-child(4) { animation-delay: 1.2s; }
+    .emoji-row span:nth-child(5) { animation-delay: 1.6s; }
+
+    .scroll-hint {
+      color: #585858;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      animation: bounceDown 1.8s ease-in-out infinite;
+    }
+
+    /* ── TICKER ──────────────────────────────────────────────── */
+    .ticker-wrap {
+      background: var(--coral);
+      color: #fff;
+      padding: 0.9rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .ticker {
+      display: inline-block;
+      animation: ticker 35s linear infinite;
+    }
+
+    .ticker span {
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-right: 4rem;
+    }
+
+    /* ── LOVE NOTES SECTION ──────────────────────────────────── */
+    .notes-section {
+      padding: 5rem 2rem 6rem;
+      text-align: center;
+    }
+
+    .section-pill {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--dark);
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.35rem 1.1rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+
+    .notes-section h2 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      color: var(--dark);
+      margin-bottom: 0.6rem;
+    }
+
+    .notes-section .sub {
+      color: #999;
+      font-size: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    /* ── FLIP CARDS ──────────────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1.5rem;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .flip-card {
+      height: 230px;
+      perspective: 1200px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.6rem;
+    }
+
+    .flip-card-front {
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .flip-card:hover:not(.flipped) .flip-card-front {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+    }
+
+    .card-emoji { font-size: 3.2rem; margin-bottom: 0.8rem; }
+
+    .card-title {
+      font-weight: 900;
+      font-size: 1rem;
+      color: var(--dark);
+    }
+
+    .card-hint {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: #ccc;
+      font-weight: 600;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-back p {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.65;
+      text-align: center;
+    }
+
+    /* Individual card back gradients */
+    .flip-card:nth-child(1) .flip-card-back { background: linear-gradient(135deg, var(--coral),  var(--pink));   }
+    .flip-card:nth-child(2) .flip-card-back { background: linear-gradient(135deg, var(--mint),   var(--teal));   }
+    .flip-card:nth-child(3) .flip-card-back { background: linear-gradient(135deg, #FFA500,       var(--yellow)); }
+    .flip-card:nth-child(4) .flip-card-back { background: linear-gradient(135deg, var(--purple), #9B59B6);      }
+    .flip-card:nth-child(5) .flip-card-back { background: linear-gradient(135deg, var(--pink),   var(--coral));  }
+    .flip-card:nth-child(6) .flip-card-back { background: linear-gradient(135deg, var(--mint),   var(--green));  }
+    .flip-card:nth-child(7) .flip-card-back { background: linear-gradient(135deg, var(--yellow),  var(--coral)); }
+    .flip-card:nth-child(8) .flip-card-back { background: linear-gradient(135deg, var(--purple), var(--pink));   }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      color: #fff;
+      text-align: center;
+      padding: 3.5rem 2rem;
+    }
+
+    footer h3 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      margin-bottom: 0.8rem;
+      background: linear-gradient(135deg, var(--yellow), var(--coral), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    footer p {
+      color: #888;
+      font-size: 0.88rem;
+    }
+
+    /* ── KEYFRAMES ───────────────────────────────────────────── */
+    @keyframes floatBob {
+      0%, 100% { transform: translateY(0);    }
+      50%       { transform: translateY(-9px); }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1);   }
+      50%       { transform: scale(1.4); }
+    }
+
+    @keyframes bounceDown {
+      0%, 100% { transform: translateY(0);   opacity: 1;   }
+      50%       { transform: translateY(7px); opacity: 0.5; }
+    }
+
+    @keyframes ticker {
+      0%   { transform: translateX(0);    }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 580px) {
+      .cards-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .flip-card { height: 190px; }
+      .card-emoji { font-size: 2.4rem; }
+    }
+
+    @media (max-width: 340px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Confetti layer -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- ═══════════════════════════════════ HERO ═══════════════════ -->
+<section class="hero">
+  <div class="hero-badge">💕 5 NĂM 💕</div>
+
+  <h1>5 năm anni</h1>
+
+  <div class="hero-names">
+    Tịnh <span class="heart">♥</span> Hiền
+  </div>
+
+  <p class="hero-sub">
+    Kỉ niệm 5 năm chịu khổ của Tịnh
+  </p>
+
+  <div class="emoji-row">
+    <span>🌸</span>
+    <span>✨</span>
+    <span>💛</span>
+    <span>🎉</span>
+    <span>💕</span>
+  </div>
+
+  <div class="scroll-hint">↓ Còn thêm ở dưới ↓</div>
+</section>
+
+<!-- ════════════════════════════════════ TICKER ════════════════ -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker">
+    <span>Ngày bên nhau: 1,826 ✨</span>
+    <span>Cà phê: Quá nhiều ☕</span>
+    <span>Chọc ngoáy: Không đếm được 😂</span>
+    <span>Phim: Chắc được vài bộ 🎬</span>
+    <span>Lúc nhớ nhau: Hên xui 💕</span>
+    <span>Điều tuyệt vời nhất: anh 🥹</span>
+    <span>Du lịch: Khắp thế giới (Khi có tiền) 🌏</span>
+    <!-- duplicate for seamless loop -->
+    <span>Ngày bên nhau: 1,826 ✨</span>
+    <span>Cà phê: Quá nhiều ☕</span>
+    <span>Chọc ngoáy: Không đếm được 😂</span>
+    <span>Phim: Chắc được vài bộ 🎬</span>
+    <span>Lúc nhớ nhau: Hên xui 💕</span>
+    <span>Điều tuyệt vời nhất: anh 🥹</span>
+    <span>Du lịch: Khắp thế giới (Khi có tiền) 🌏</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ LOVE NOTES ══════════════════ -->
+<section class="notes-section">
+  <div class="section-pill">💌 Ấn vô để xem</div>
+  <h2>Bảng tin khó chịu</h2>
+  <p class="sub">8 khoảnh khắc nhỏ 🎁</p>
+
+  <div class="cards-grid">
+
+    <div class="flip-card" onclick="flipCard(this)">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="card-emoji">😂</div>
+          <div class="card-title">Nụ cười</div>
+          <div class="card-hint">Ấn vào ✨</div>
+        </div>
+        <div class="flip-card-back">
+          <p>Nụ cười ngờ nghệch  💛</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="flipCard(this)">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="card-emoji">🥹</div>
+          <div class="card-title">Ngày đầu</div>
+          <div class="card-hint">Ấn vào ✨</div>
+        </div>
+        <div class="flip-card-back">
+          <p>Cứ ngỡ là cô gái dịu hiền, sau này lộ ra tưng tửng không ai bằng 🎉</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="flipCard(this)">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="card-emoji">☕</div>
+          <div class="card-title">Các ngày bình thường</div>
+          <div class="card-hint">Ấn vào ✨</div>
+        </div>
+        <div class="flip-card-back">
+          <p>Tám hơn cả các chợ ở sài gòn. ☀️</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="flipCard(this)">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="card-emoji">🧠</div>
+          <div class="card-title">Có não</div>
+          <div class="card-hint">Ấn vào ✨</div>
+        </div>
+        <div class="flip-card-back">
+          <p>Lâu lâu cũng có một xíu sự quan tâm tử tế🌸</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="flipCard(this)">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="card-emoji">🌏</div>
+          <div class="card-title">Du lịch</div>
+          <div class="card-hint">Ấn vào ✨</div>
+        </div>
+        <div class="flip-card-back">
+          <p>Mù đường nhưng ham đi chơi 🗺️</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="flipCard(this)">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="card-emoji">🌱</div>
+          <div class="card-title">Tương lai</div>
+          <div class="card-hint">Ấn vào ✨</div>
+        </div>
+        <div class="flip-card-back">
+          <p>Hãy cùng giúp nhau trở thành con người tốt hơn mỗi ngày 🌷</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ FOOTER ══════════════════ -->
+<footer>
+  <h3>Here's to forever 💕</h3>
+  <p>Mừng kỉ niệm 5 năm bên nhau với em 🌸</p>
+</footer>
+
+<!-- ════════════════════════════════ SCRIPTS ══════════════════ -->
+<script>
+  /* ── CONFETTI ENGINE ─────────────────────────────────────── */
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx    = canvas.getContext('2d');
+  let pieces   = [];
+  let raf;
+
+  const COLORS = [
+    '#FF6B6B','#FFE66D','#4ECDC4',
+    '#FF8FAB','#C77DFF','#45B7D1','#2ECC71','#FFA500'
+  ];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  /**
+   * Spawn confetti pieces.
+   * @param {number} count  - how many pieces
+   * @param {number|null} cx - screen X origin (null = random across top)
+   * @param {number|null} cy - screen Y origin (null = random across top)
+   * @param {boolean} burst - true = explode outward, false = rain down
+   */
+  function spawnConfetti(count, cx, cy, burst) {
+    for (let i = 0; i < count; i++) {
+      const angle  = burst ? Math.random() * Math.PI * 2 : 0;
+      const speed  = burst ? Math.random() * 6 + 2 : Math.random() * 2.5 + 1;
+      pieces.push({
+        x:     cx ?? Math.random() * canvas.width,
+        y:     cy ?? -12,
+        w:     Math.random() * 11 + 5,
+        h:     Math.random() * 6  + 3,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        vx:    burst ? Math.cos(angle) * speed : Math.random() * 4 - 2,
+        vy:    burst ? Math.sin(angle) * speed : Math.random() * 2 + 1,
+        rot:   Math.random() * 360,
+        spin:  Math.random() * 8 - 4,
+        life:  1,
+        decay: burst ? 0.018 : 0.006,
+        gravity: burst ? 0.15 : 0,
+      });
+    }
+  }
+
+  function drawLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces = pieces.filter(p => p.life > 0.01);
+
+    for (const p of pieces) {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+
+      p.x   += p.vx;
+      p.vy  += p.gravity;
+      p.y   += p.vy;
+      p.rot += p.spin;
+      if (!p.gravity && p.y > canvas.height) { p.life -= 0.04; }
+      else { p.life -= p.decay; }
+    }
+
+    if (pieces.length > 0) {
+      raf = requestAnimationFrame(drawLoop);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      raf = null;
+    }
+  }
+
+  function launchConfetti(count, cx, cy, burst) {
+    spawnConfetti(count, cx, cy, burst);
+    if (!raf) { raf = requestAnimationFrame(drawLoop); }
+  }
+
+  /* page-load rain */
+  window.addEventListener('load', () => launchConfetti(130, null, null, false));
+
+  /* ── FLIP CARDS ──────────────────────────────────────────── */
+  function flipCard(card) {
+    card.classList.toggle('flipped');
+    if (card.classList.contains('flipped')) {
+      const r  = card.getBoundingClientRect();
+      const cx = r.left + r.width  / 2;
+      const cy = r.top  + r.height / 2;
+      launchConfetti(40, cx, cy, true);   /* burst from card center */
+    }
+  }
+</script>
+
+</body>
+</html>
